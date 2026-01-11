@@ -1,0 +1,10 @@
+<clubs>
+  <club id="1">
+    <nom fr="Club Informatique" en="Computer Club"/>
+    <description fr="Apprends la programmation." en="Learn programming."/>
+  </club>
+  <club id="2">
+    <nom fr="Club Sportif" en="Sports Club"/>
+    <description fr="Pratique divers sports." en="Practice different sports."/>
+  </club>
+</clubs>

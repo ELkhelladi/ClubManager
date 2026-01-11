@@ -1,0 +1,7 @@
+<demandes>
+  <demande id="1">
+    <nomEtudiant>Ali</nomEtudiant>
+    <clubId>1</clubId>
+    <statut>En attente</statut>
+  </demande>
+</demandes>

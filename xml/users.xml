@@ -1,0 +1,6 @@
+<users>
+  <user username="ali" password="1234" role="membre"/>
+  <user username="sara" password="abcd" role="superviseur"/>
+  <user username="khaoula" password="word" role="admin"/>
+  <user username="salma" password="pass" role="superviseur"/>
+</users>

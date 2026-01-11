@@ -1,0 +1,16 @@
+<lang>
+  <titre>Bienvenue sur ClubManager</titre>
+  <choixLangue>Choisir la langue :</choixLangue>
+  <listeClubs>Liste des clubs :</listeClubs>
+  <login>Login</login>
+  <demande>Demande d'inscription</demande>
+  <formulaireTitre>Formulaire étudiant</formulaireTitre>
+  <nomEtudiant>Nom de l'étudiant</nomEtudiant>
+  <envoyer>Envoyer</envoyer>
+  <erreurNom>Veuillez entrer votre nom</erreurNom>
+  <demandeEnvoyee>Demande envoyée avec succès pour</demandeEnvoyee>
+  <promptUsername>Nom d'utilisateur :</promptUsername>
+  <promptPassword>Mot de passe :</promptPassword>
+  <loginSuccess>Login réussi</loginSuccess>
+  <loginFailed>Login échoué</loginFailed>
+</lang>

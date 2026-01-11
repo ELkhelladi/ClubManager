@@ -1,0 +1,13 @@
+<lang>
+  <titre>ClubManager</titre>
+  <choixLangue>Select Language:</choixLangue>
+  <listeClubs>Club list</listeClubs>
+  <login>Login</login>
+  <demande>Request</demande>
+  <formulaireTitre>Membership Form</formulaireTitre>
+  <nomUtilisateur>Username</nomUtilisateur>
+  <motDePasse>Password</motDePasse>
+  <seConnecter>Login</seConnecter>
+  <nomEtudiant>Your name</nomEtudiant>
+  <envoyer>Send</envoyer>
+</lang>
