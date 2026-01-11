@@ -1,7 +1,24 @@
+<?xml version="1.0"?>
 <demandes>
   <demande id="1">
     <nomEtudiant>Ali</nomEtudiant>
     <clubId>1</clubId>
     <statut>En attente</statut>
+  </demande>
+  <demande id="D1768152518484">
+    <nomEtudiant>hh</nomEtudiant>
+    <email>oumaimamouine@gmail.com</email>
+    <motivation/>
+    <clubId>1</clubId>
+    <statut>en_attente</statut>
+    <dateCreation>2026-01-11T17:28:38.484Z</dateCreation>
+  </demande>
+  <demande id="D1768153336460">
+    <nomEtudiant>ouma</nomEtudiant>
+    <email>oumaimamouine@gmail.com</email>
+    <motivation/>
+    <clubId>1</clubId>
+    <statut>en_attente</statut>
+    <dateCreation>2026-01-11T17:42:16.460Z</dateCreation>
   </demande>
 </demandes>
