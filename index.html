@@ -1,28 +1,493 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head> 
-  <meta charset="UTF-8">
-  <title>ClubManager - Accueil</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="js/app.js"></script>
-  <script src="js/crud.js"></script>
-  <script src="js/login.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubManager - Gestion du Club Informatique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .club-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .club-info h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .club-info p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .action-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .action-card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Modal Login */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .features {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+        }
+
+        .features h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
 </head>
-<body onload="chargerLangue('fr')">
+<body>
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="changerLangue('fr')">🇫🇷 FR</button>
+        <button class="lang-btn" onclick="changerLangue('en')">🇬🇧 EN</button>
+    </div>
 
-  <header>
-    <h1 id="titrePage"></h1>
-    <label id="labelLangue"></label>
-    <select id="langue" onchange="changerLangue(this.value)">
-      <option value="fr">FR</option>
-      <option value="en">EN</option>
-    </select>
-  </header>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 ClubManager</h1>
+            <p id="subtitle">Plateforme de gestion du Club Informatique</p>
+        </div>
 
-  <hr>
+        <div class="main-card">
+            <div class="club-info">
+                <h2 id="clubName">Club Informatique</h2>
+                <p id="clubDesc">Rejoignez-nous pour explorer le monde de la technologie et de l'innovation</p>
+            </div>
 
-  <div id="clubsContent"></div>
-  <div id="formulaireClub"></div>
+            <div class="actions-grid">
+                <div class="action-card" onclick="ouvrirModalLogin('superviseur')">
+                    <div class="icon">👨‍💼</div>
+                    <h3 id="titleSuper">Espace Superviseur</h3>
+                    <p id="descSuper">Gérer les membres et activités</p>
+                    <button class="btn" id="btnSuper">Se connecter</button>
+                </div>
 
+                <div class="action-card" onclick="ouvrirModalLogin('membre')">
+                    <div class="icon">👤</div>
+                    <h3 id="titleMembre">Espace Membre</h3>
+                    <p id="descMembre">Voir et rejoindre les activités</p>
+                    <button class="btn" id="btnMembre">Se connecter</button>
+                </div>
+            </div>
+
+            <div class="features">
+                <h3 id="featuresTitle">✨ Fonctionnalités</h3>
+                <ul>
+                    <li id="feat1">Gestion des membres du club</li>
+                    <li id="feat2">Création et organisation d'activités</li>
+                    <li id="feat3">Inscription aux activités</li>
+                    <li id="feat4">Suivi des participations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div class="modal" id="modalLogin">
+        <div class="modal-content">
+            <h2 id="loginTitle">🔐 Connexion</h2>
+            <form id="formLogin" onsubmit="seConnecter(event)">
+                <input type="hidden" id="loginRole">
+                <div class="form-group">
+                    <label id="labelUsername">Nom d'utilisateur</label>
+                    <input type="text" id="username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label id="labelPassword">Mot de passe</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="fermerModal()" id="btnCancel">Annuler</button>
+                    <button type="submit" class="btn" style="flex: 1;" id="btnLogin">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- <script src="js/app.js"></script> -->
+    <script>
+        let currentLang = 'fr';
+        const translations = {
+            fr: {
+                subtitle: "Plateforme de gestion du Club Informatique",
+                clubName: "Club Informatique",
+                clubDesc: "Rejoignez-nous pour explorer le monde de la technologie et de l'innovation",
+                titleSuper: "Espace Superviseur",
+                descSuper: "Gérer les membres et activités",
+                btnSuper: "Se connecter",
+                titleMembre: "Espace Membre",
+                descMembre: "Voir et rejoindre les activités",
+                btnMembre: "Se connecter",
+                featuresTitle: "✨ Fonctionnalités",
+                feat1: "Gestion des membres du club",
+                feat2: "Création et organisation d'activités",
+                feat3: "Inscription aux activités",
+                feat4: "Suivi des participations",
+                loginTitle: "🔐 Connexion",
+                labelUsername: "Nom d'utilisateur",
+                labelPassword: "Mot de passe",
+                btnCancel: "Annuler",
+                btnLogin: "Se connecter",
+                loginSuccess: "Connexion réussie !",
+                loginFailed: "Identifiants incorrects"
+            },
+            en: {
+                subtitle: "Computer Club Management Platform",
+                clubName: "Computer Club",
+                clubDesc: "Join us to explore the world of technology and innovation",
+                titleSuper: "Supervisor Area",
+                descSuper: "Manage members and activities",
+                btnSuper: "Login",
+                titleMembre: "Member Area",
+                descMembre: "View and join activities",
+                btnMembre: "Login",
+                featuresTitle: "✨ Features",
+                feat1: "Club member management",
+                feat2: "Activity creation and organization",
+                feat3: "Activity registration",
+                feat4: "Participation tracking",
+                loginTitle: "🔐 Login",
+                labelUsername: "Username",
+                labelPassword: "Password",
+                btnCancel: "Cancel",
+                btnLogin: "Login",
+                loginSuccess: "Login successful!",
+                loginFailed: "Incorrect credentials"
+            }
+        };
+
+        function changerLangue(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const t = translations[lang];
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('clubName').textContent = t.clubName;
+            document.getElementById('clubDesc').textContent = t.clubDesc;
+            document.getElementById('titleSuper').textContent = t.titleSuper;
+            document.getElementById('descSuper').textContent = t.descSuper;
+            document.getElementById('btnSuper').textContent = t.btnSuper;
+            document.getElementById('titleMembre').textContent = t.titleMembre;
+            document.getElementById('descMembre').textContent = t.descMembre;
+            document.getElementById('btnMembre').textContent = t.btnMembre;
+            document.getElementById('featuresTitle').textContent = t.featuresTitle;
+            document.getElementById('feat1').textContent = t.feat1;
+            document.getElementById('feat2').textContent = t.feat2;
+            document.getElementById('feat3').textContent = t.feat3;
+            document.getElementById('feat4').textContent = t.feat4;
+            document.getElementById('loginTitle').textContent = t.loginTitle;
+            document.getElementById('labelUsername').textContent = t.labelUsername;
+            document.getElementById('labelPassword').textContent = t.labelPassword;
+            document.getElementById('btnCancel').textContent = t.btnCancel;
+            document.getElementById('btnLogin').textContent = t.btnLogin;
+        }
+
+        function ouvrirModalLogin(role) {
+            document.getElementById('loginRole').value = role;
+            document.getElementById('modalLogin').classList.add('active');
+            document.getElementById('username').focus();
+        }
+
+        function fermerModal() {
+            document.getElementById('modalLogin').classList.remove('active');
+            document.getElementById('formLogin').reset();
+        }
+
+        async function seConnecter(event) {
+            event.preventDefault();
+            console.log('Form submitted');
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const expectedRole = document.getElementById('loginRole').value;
+            console.log('Trying to login as:', expectedRole, 'with user:', username);  // Trace inputs
+
+            try {
+                const response = await fetch('xml/users.xml');
+                console.log('Fetch response:', response);  // Check status (should be 200 OK)
+                if (!response.ok) throw new Error('Fetch failed');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, 'text/xml');
+                console.log('Parsed XML:', xml);  // Inspect XML
+
+                const users = xml.getElementsByTagName('user');
+                let trouve = false;
+
+                for (let user of users) {
+                    const xmlUsername = user.getAttribute('username');
+                    const xmlPassword = user.getAttribute('password');
+                    const xmlRole = user.getAttribute('role');
+
+                    if (xmlUsername === username && xmlPassword === password && xmlRole === expectedRole) {
+                        trouve = true;
+                        
+                        // Sauvegarder la session
+                        sessionStorage.setItem('username', username);
+                        sessionStorage.setItem('role', xmlRole);
+
+                        alert(translations[currentLang].loginSuccess);
+
+                        // Redirection
+                        if (xmlRole === 'superviseur') {
+                            window.location.href = 'html/superviseur.html';
+                        } else if (xmlRole === 'membre') {
+                            window.location.href = 'html/membre.html';
+                        }
+                        break;
+                    }
+                }
+
+                if (!trouve) {
+                    alert(translations[currentLang].loginFailed);
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur de connexion: ' + error.message);            }
+        }
+
+        // Fermer modal sur Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') fermerModal();
+        });
+    </script>
 </body>
 </html>

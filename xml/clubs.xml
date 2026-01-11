@@ -1,4 +1,5 @@
-<clubs>  
+<?xml version="1.0"?>
+<clubs>
   <club id="1">
     <nom fr="Club Informatique" en="Computer Club"/>
     <description fr="Apprends la programmation." en="Learn programming."/>
@@ -6,5 +7,9 @@
   <club id="2">
     <nom fr="Club Sportif" en="Sports Club"/>
     <description fr="Pratique divers sports." en="Practice different sports."/>
+  </club>
+  <club id="C1768155437070">
+    <nom fr="club 1" en="club 1"/>
+    <description fr="frjrhrrh" en="forokgkg"/>
   </club>
 </clubs>

@@ -1,0 +1,9 @@
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file(): file:/C:/xampp1/htdocs/ClubManager/xml/membres.xml:1: parser error : Document is empty in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file():  in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file(): ^ in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file(): file:/C:/xampp1/htdocs/ClubManager/xml/membres.xml:1: parser error : Document is empty in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file():  in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:16 Africa/Casablanca] PHP Warning:  simplexml_load_file(): ^ in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 239
+[11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file(): file:/C:/xampp1/htdocs/ClubManager/xml/membres.xml:1: parser error : Document is empty in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51
+[11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file():  in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51
+[11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file(): ^ in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51

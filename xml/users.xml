@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <users>
-  <user username="ali" password="1234" role="membre"/>
-  <user username="sara" password="abcd" role="superviseur"/>
-  <user username="khaoula" password="word" role="admin"/>
-  <user username="salma" password="pass" role="superviseur"/>
+    <user username="superviseur" password="super123" role="superviseur"/>
+    <user username="ahmed" password="ahmed123" role="membre"/>
+    <user username="fatima" password="fatima123" role="membre"/>
 </users>
