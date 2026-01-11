@@ -7,3 +7,12 @@
 [11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file(): file:/C:/xampp1/htdocs/ClubManager/xml/membres.xml:1: parser error : Document is empty in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51
 [11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file():  in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51
 [11-Jan-2026 23:32:28 Africa/Casablanca] PHP Warning:  simplexml_load_file(): ^ in C:\xampp1\htdocs\ClubManager\backend\membres.php on line 51
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Warning:  simplexml_load_file(): file:/C:/xampp1/htdocs/ClubManager/xml/membres.xml:1: parser error : Document is empty in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 129
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Warning:  simplexml_load_file():  in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 129
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Warning:  simplexml_load_file(): ^ in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 129
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Warning:  Attempt to read property "membre" on bool in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 136
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Warning:  foreach() argument must be of type array|object, null given in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 136
+[11-Jan-2026 23:43:45 Africa/Casablanca] PHP Fatal error:  Uncaught Error: Call to a member function addChild() on bool in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php:145
+Stack trace:
+#0 {main}
+  thrown in C:\xampp1\htdocs\ClubManager\backend\diagnostic.php on line 145

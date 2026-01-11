@@ -1,200 +1,144 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 
+require_once __DIR__ . '/config.php';
+
 echo "<!DOCTYPE html>
 <html>
 <head>
-    <title>Diagnostic - Club Informatique</title>
+    <title>Réparation - Club Informatique</title>
     <style>
-        body { font-family: Arial; max-width: 1000px; margin: 20px auto; padding: 20px; }
-        .success { color: green; background: #e8f5e9; padding: 10px; margin: 5px 0; border-left: 4px solid green; }
-        .error { color: red; background: #ffebee; padding: 10px; margin: 5px 0; border-left: 4px solid red; }
-        .warning { color: orange; background: #fff3e0; padding: 10px; margin: 5px 0; border-left: 4px solid orange; }
-        .info { color: blue; background: #e3f2fd; padding: 10px; margin: 5px 0; border-left: 4px solid blue; }
-        pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        h2 { color: #667eea; margin-top: 30px; }
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .success { color: green; background: #e8f5e9; padding: 10px; margin: 10px 0; border-left: 4px solid green; }
+        .error { color: red; background: #ffebee; padding: 10px; margin: 10px 0; border-left: 4px solid red; }
+        .info { color: blue; background: #e3f2fd; padding: 10px; margin: 10px 0; border-left: 4px solid blue; }
+        h1 { color: #667eea; }
+        button { background: #667eea; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 10px 5px; }
+        button:hover { background: #5568d3; }
     </style>
 </head>
 <body>
-    <h1>🔍 Diagnostic du système</h1>";
+    <h1>🔧 Réparation des fichiers XML</h1>";
 
-// 1. Vérifier PHP
-echo "<h2>1️⃣ Version PHP</h2>";
-echo "<div class='info'>PHP Version: " . phpversion() . "</div>";
-
-// 2. Vérifier config.php
-echo "<h2>2️⃣ Fichier config.php</h2>";
-if (file_exists(__DIR__ . '/config.php')) {
-    echo "<div class='success'>✅ config.php existe</div>";
-    require_once __DIR__ . '/config.php';
-    echo "<div class='info'>XML_DIR défini: " . XML_DIR . "</div>";
-} else {
-    echo "<div class='error'>❌ config.php introuvable</div>";
-    exit;
-}
-
-// 3. Vérifier le dossier XML
-echo "<h2>3️⃣ Dossier XML</h2>";
-if (file_exists(XML_DIR)) {
-    echo "<div class='success'>✅ Dossier XML existe</div>";
-    echo "<div class='info'>Chemin: " . XML_DIR . "</div>";
-    
-    if (is_writable(XML_DIR)) {
-        echo "<div class='success'>✅ Dossier accessible en écriture</div>";
-    } else {
-        echo "<div class='error'>❌ Dossier NON accessible en écriture</div>";
-        echo "<div class='warning'>Exécutez: chmod 777 " . XML_DIR . "</div>";
-    }
-    
-    $perms = substr(sprintf('%o', fileperms(XML_DIR)), -4);
-    echo "<div class='info'>Permissions: " . $perms . "</div>";
-} else {
-    echo "<div class='warning'>⚠️ Dossier XML n'existe pas - tentative de création...</div>";
+// Fonction pour créer un fichier XML vide et valide
+function creerXMLVide($fichier, $racine) {
     try {
-        ensureXmlDirExists();
-        echo "<div class='success'>✅ Dossier XML créé avec succès</div>";
+        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml->formatOutput = true;
+        $root = $xml->createElement($racine);
+        $xml->appendChild($root);
+        
+        if ($xml->save($fichier)) {
+            @chmod($fichier, 0666);
+            return true;
+        }
+        return false;
     } catch (Exception $e) {
-        echo "<div class='error'>❌ Erreur: " . $e->getMessage() . "</div>";
+        return false;
     }
 }
 
-// 4. Vérifier les fichiers XML
-echo "<h2>4️⃣ Fichiers XML</h2>";
-
-$xmlFiles = [
-    'membres.xml' => MEMBRES_XML,
-    'activites.xml' => ACTIVITES_XML,
-    'participations.xml' => PARTICIPATIONS_XML,
-    'users.xml' => USERS_XML
-];
-
-foreach ($xmlFiles as $name => $path) {
-    echo "<h3>$name</h3>";
-    if (file_exists($path)) {
-        echo "<div class='success'>✅ Fichier existe</div>";
-        
-        if (is_readable($path)) {
-            echo "<div class='success'>✅ Lisible</div>";
-        } else {
-            echo "<div class='error'>❌ NON lisible</div>";
-        }
-        
-        if (is_writable($path)) {
-            echo "<div class='success'>✅ Accessible en écriture</div>";
-        } else {
-            echo "<div class='error'>❌ NON accessible en écriture</div>";
-        }
-        
-        $size = filesize($path);
-        echo "<div class='info'>Taille: " . $size . " octets</div>";
-        
-        // Essayer de charger le XML
-        $xml = @simplexml_load_file($path);
-        if ($xml !== false) {
-            echo "<div class='success'>✅ XML valide</div>";
-            
-            // Afficher le contenu
-            if ($name === 'membres.xml') {
-                $count = count($xml->membre);
-                echo "<div class='info'>Nombre de membres: $count</div>";
-                
-                if ($count > 0) {
-                    echo "<pre>" . htmlspecialchars($xml->asXML()) . "</pre>";
-                }
-            }
-        } else {
-            echo "<div class='error'>❌ XML invalide ou corrompu</div>";
-        }
-        
+// Vérifier et réparer membres.xml
+echo "<h2>📝 membres.xml</h2>";
+if (!file_exists(MEMBRES_XML) || filesize(MEMBRES_XML) === 0) {
+    echo "<div class='error'>❌ Fichier vide ou inexistant</div>";
+    
+    if (creerXMLVide(MEMBRES_XML, 'membres')) {
+        echo "<div class='success'>✅ Fichier recréé avec succès!</div>";
+        echo "<div class='info'>Contenu:<pre>" . htmlspecialchars(file_get_contents(MEMBRES_XML)) . "</pre></div>";
     } else {
-        echo "<div class='warning'>⚠️ Fichier n'existe pas</div>";
+        echo "<div class='error'>❌ Impossible de recréer le fichier</div>";
+    }
+} else {
+    $xml = @simplexml_load_file(MEMBRES_XML);
+    if ($xml === false) {
+        echo "<div class='error'>❌ Fichier corrompu - réparation...</div>";
+        
+        // Sauvegarder le contenu corrompu
+        @rename(MEMBRES_XML, MEMBRES_XML . '.backup');
+        
+        if (creerXMLVide(MEMBRES_XML, 'membres')) {
+            echo "<div class='success'>✅ Fichier réparé! (ancien fichier sauvegardé en .backup)</div>";
+        } else {
+            echo "<div class='error'>❌ Impossible de réparer</div>";
+        }
+    } else {
+        echo "<div class='success'>✅ Fichier valide</div>";
+        $count = count($xml->membre);
+        echo "<div class='info'>Nombre de membres: $count</div>";
     }
 }
 
-// 5. Test de création de membre
-echo "<h2>5️⃣ Test de création de membre</h2>";
+// Vérifier activites.xml
+echo "<h2>📅 activites.xml</h2>";
+if (!file_exists(ACTIVITES_XML) || filesize(ACTIVITES_XML) === 0) {
+    if (creerXMLVide(ACTIVITES_XML, 'activites')) {
+        echo "<div class='success'>✅ Fichier créé</div>";
+    } else {
+        echo "<div class='error'>❌ Erreur création</div>";
+    }
+} else {
+    $xml = @simplexml_load_file(ACTIVITES_XML);
+    if ($xml === false) {
+        @rename(ACTIVITES_XML, ACTIVITES_XML . '.backup');
+        creerXMLVide(ACTIVITES_XML, 'activites');
+        echo "<div class='success'>✅ Fichier réparé</div>";
+    } else {
+        echo "<div class='success'>✅ Fichier valide</div>";
+        $count = count($xml->activite);
+        echo "<div class='info'>Nombre d'activités: $count</div>";
+    }
+}
+
+// Vérifier participations.xml
+echo "<h2>👥 participations.xml</h2>";
+if (!file_exists(PARTICIPATIONS_XML) || filesize(PARTICIPATIONS_XML) === 0) {
+    if (creerXMLVide(PARTICIPATIONS_XML, 'participations')) {
+        echo "<div class='success'>✅ Fichier créé</div>";
+    } else {
+        echo "<div class='error'>❌ Erreur création</div>";
+    }
+} else {
+    $xml = @simplexml_load_file(PARTICIPATIONS_XML);
+    if ($xml === false) {
+        @rename(PARTICIPATIONS_XML, PARTICIPATIONS_XML . '.backup');
+        creerXMLVide(PARTICIPATIONS_XML, 'participations');
+        echo "<div class='success'>✅ Fichier réparé</div>";
+    } else {
+        echo "<div class='success'>✅ Fichier valide</div>";
+        $count = count($xml->participation);
+        echo "<div class='info'>Nombre de participations: $count</div>";
+    }
+}
+
+// Test final
+echo "<h2>✅ Test final</h2>";
 
 try {
-    ensureXmlDirExists();
+    // Test de lecture
+    $xmlMembres = @simplexml_load_file(MEMBRES_XML);
+    $xmlActivites = @simplexml_load_file(ACTIVITES_XML);
+    $xmlParticipations = @simplexml_load_file(PARTICIPATIONS_XML);
     
-    $testData = [
-        'nom' => 'Test Diagnostic',
-        'email' => 'test@diagnostic.com',
-        'telephone' => '0600000000'
-    ];
-    
-    $xmlFile = MEMBRES_XML;
-    
-    if (file_exists($xmlFile)) {
-        $xml = simplexml_load_file($xmlFile);
+    if ($xmlMembres !== false && $xmlActivites !== false && $xmlParticipations !== false) {
+        echo "<div class='success'>
+            <h3>🎉 TOUT EST PRÊT !</h3>
+            <p>Tous les fichiers XML sont valides et accessibles.</p>
+            <p>Vous pouvez maintenant utiliser l'application.</p>
+        </div>";
+        
+        echo "<div style='margin-top: 30px; text-align: center;'>
+            <a href='diagnostic.php'><button>🔍 Voir le diagnostic</button></a>
+            <a href='membres.php?action=lister'><button>📝 Tester l'API Membres</button></a>
+            <a href='../html/superviseur.html'><button>👨‍💼 Interface Superviseur</button></a>
+        </div>";
     } else {
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><membres></membres>');
-    }
-    
-    // Vérifier si le membre de test existe déjà
-    $exists = false;
-    foreach ($xml->membre as $m) {
-        if ((string)$m->email === $testData['email']) {
-            $exists = true;
-            echo "<div class='info'>ℹ️ Membre de test existe déjà</div>";
-            break;
-        }
-    }
-    
-    if (!$exists) {
-        $membre = $xml->addChild('membre');
-        $membre->addAttribute('id', 'TEST-' . time());
-        $membre->addChild('nom', $testData['nom']);
-        $membre->addChild('email', $testData['email']);
-        $membre->addChild('telephone', $testData['telephone']);
-        $membre->addChild('dateAdhesion', date('Y-m-d H:i:s'));
-        
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($xml->asXML());
-        
-        if ($dom->save($xmlFile)) {
-            echo "<div class='success'>✅ Membre de test ajouté avec succès!</div>";
-            echo "<pre>" . htmlspecialchars($dom->saveXML()) . "</pre>";
-        } else {
-            echo "<div class='error'>❌ Impossible de sauvegarder le membre de test</div>";
-        }
+        echo "<div class='error'>❌ Certains fichiers sont encore corrompus</div>";
     }
     
 } catch (Exception $e) {
-    echo "<div class='error'>❌ Erreur lors du test: " . $e->getMessage() . "</div>";
-    echo "<div class='error'>Trace: <pre>" . $e->getTraceAsString() . "</pre></div>";
+    echo "<div class='error'>❌ Erreur: " . $e->getMessage() . "</div>";
 }
 
-// 6. Logs
-echo "<h2>6️⃣ Logs d'erreurs</h2>";
-
-$logFile = __DIR__ . '/app.log';
-if (file_exists($logFile)) {
-    echo "<div class='info'>📄 Contenu de app.log:</div>";
-    echo "<pre>" . htmlspecialchars(file_get_contents($logFile)) . "</pre>";
-} else {
-    echo "<div class='info'>Aucun fichier de log trouvé</div>";
-}
-
-$phpErrorLog = __DIR__ . '/php-errors.log';
-if (file_exists($phpErrorLog)) {
-    echo "<div class='info'>📄 Contenu de php-errors.log:</div>";
-    echo "<pre>" . htmlspecialchars(file_get_contents($phpErrorLog)) . "</pre>";
-} else {
-    echo "<div class='info'>Aucune erreur PHP loggée</div>";
-}
-
-echo "
-    <hr>
-    <h2>✅ Actions recommandées</h2>
-    <ol>
-        <li>Vérifier que tous les fichiers XML existent et sont accessibles en écriture</li>
-        <li>Vérifier les permissions: <code>chmod -R 777 xml/</code></li>
-        <li>Tester l'API directement: <a href='membres.php?action=lister'>membres.php?action=lister</a></li>
-        <li>Vérifier la console JavaScript pour les erreurs côté client</li>
-    </ol>
-</body>
-</html>";
+echo "</body></html>";
 ?>
