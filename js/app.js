@@ -1,30 +1,17 @@
-let currentLang = 'fr';
-let langTexts = {};
 
+// Fonction pour charger un fichier XML
 function loadXML(path) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", path, false);
-  xhr.send();
-  return xhr.responseXML;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", path, false);
+    try {
+        xhr.send();
+        if (xhr.status === 200) {
+            return xhr.responseXML;
+        }
+    } catch (e) {
+        console.error("Erreur chargement XML:", path, e);
+    }
+    return null;
 }
 
-function chargerLangue(lang) {
-  currentLang = lang;
-  const xml = loadXML(`xml/lang_${lang}.xml`);
-  if (!xml) { alert("Fichier langue introuvable"); return; }
-
-  const langNode = xml.getElementsByTagName("lang")[0];
-  langTexts = {};
-  for (let i=0;i<langNode.children.length;i++){
-    langTexts[langNode.children[i].tagName] = langNode.children[i].textContent;
-  }
-
-  document.getElementById("titrePage").innerText = langTexts['titre'];
-  document.getElementById("labelLangue").innerText = langTexts['choixLangue'];
-
-  afficherClubs();
-}
-
-function changerLangue(lang) {
-  chargerLangue(lang);
-}
+console.log('✅ app.js chargé');

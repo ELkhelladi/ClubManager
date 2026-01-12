@@ -2,5 +2,5 @@
 <users>
     <user username="superviseur" password="super123" role="superviseur"/>
     <user username="ahmed" password="ahmed123" role="membre"/>
-    <user username="fatima" password="fatima123" role="membre"/>
+    <user username="oumaa" password="ouma123" role="membre"/>
 </users>
